@@ -1,0 +1,237 @@
+{
+    "_version": "1.5.0",
+    "sap.app": {
+        "id": "ch.bielbienne.HolidayPassHolidayPassProcessing",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "1.0.0"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "sourceTemplate": {
+            "id": "servicecatalog.connectivityComponent",
+            "version": "0.0.0"
+        },
+        "dataSources": {
+            "ZFP_SRV": {
+                "uri": "/sap/opu/odata/sap/ZFP_SRV/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "localUri": "localService/metadata.xml"
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        },
+        "supportedThemes": [
+            "sap_hcb",
+            "sap_belize"
+        ]
+    },
+    "sap.ui5": {
+        "rootView": {
+            "viewName": "ch.bielbienne.HolidayPassHolidayPassProcessing.view.Main",
+            "type": "XML"
+        },
+        "dependencies": {
+            "minUI5Version": "1.30.0",
+            "libs": {
+                "sap.ui.core": {},
+                "sap.m": {},
+                "sap.ui.layout": {},
+                "sap.uxap": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "ch.bielbienne.HolidayPassHolidayPassProcessing.i18n.i18n"
+                }
+            },
+            "ZFP_SRV": {
+                "type": "sap.ui.model.odata.v2.ODataModel",
+                "settings": {
+                    "defaultOperationMode": "Server",
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Request"
+                },
+                "dataSource": "ZFP_SRV",
+                "preload": true
+            },
+            "tarif_mismatch": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": false
+            },
+            "debitor_table": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": false
+            },
+            "control": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": false
+            },
+            "settings": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": false
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "viewPath": "ch.bielbienne.HolidayPassHolidayPassProcessing.view",
+                "viewType": "XML",
+                "routerClass": "sap.m.routing.Router",
+                "controlAggregation": "pages",
+                "transition": "slide",
+                "controlId": "app"
+            },
+            "routes": [
+                {
+                    "name": "Main",
+                    "pattern": "",
+                    "target": "Main"
+                },
+                {
+                    "name": "PrintInvoices",
+                    "pattern": "invoice/print/{Period}",
+                    "target": "PrintInvoices"
+                },
+                {
+                    "name": "AssignDebitorManual",
+                    "pattern": "assignDebitorManual/{debitorId}",
+                    "target": "AssignDebitorManual"
+                },
+                {
+                    "name": "ShowPDFInvoice",
+                    "pattern": "/pdfInvoice/{Id}/{Period}",
+                    "target": "showPDFInvoice"
+                },
+                {
+                    "name": "ChangeDebitorOverview",
+                    "pattern": "changeDebitorOverview/overview/:update:",
+                    "target": "changeDebitorOverview"
+                },
+                {
+                    "name": "ChangeDebitor",
+                    "pattern": "changeDebitor/{debitorId}",
+                    "target": "changeDebitor"
+                },
+                {
+                    "name": "ClearDebitorDoublets",
+                    "pattern": "debitor/doubletmatching",
+                    "target": "clearDebiDoublets"
+                },
+                {
+                    "name": "TestPrintInvoices",
+                    "pattern": "invoice/testprint/{Period}",
+                    "target": "testPrintInvoices"
+                },
+                {
+                    "name": "CreateNewSAPDebitors",
+                    "pattern": "debitor/createNewSAPDebitors",
+                    "target": "createNewSAPDebitors"
+                },
+                {
+                    "name": "AssignDebitorManualOverview",
+                    "pattern": "debitor/manualAssigment",
+                    "target": "assignDebitorManualOverview"
+                },
+                {
+                    "name": "ResolveTarifMismatch",
+                    "pattern": "debitor/resolveTarifMismatch",
+                    "target": "resolveTarifMismatch"
+                },
+                {
+                    "name": "MaintainActivity",
+                    "pattern": "activity/overview",
+                    "target": "maintainActivity"
+                }
+            ],
+            "targets": {
+                "PrintInvoices": {
+                    "viewName": "printInvoices"
+                },
+                "maintainActivity": {
+                    "viewName": "maintainActivity"
+                },
+                "testPrintInvoices": {
+                    "viewName": "testPrintInvoices"
+                },
+                "Main": {
+                    "viewName": "Main",
+                    "viewLevel": 1
+                },
+                "AssignDebitorManual": {
+                    "viewName": "AssignDebitorManual"
+                },
+                "clearDebiDoublets": {
+                    "viewName": "clearDebitorDoublets"
+                },
+                "showPDFInvoice": {
+                    "viewName": "showPDFInvoice"
+                },
+                "changeDebitorOverview": {
+                    "viewName": "changeDebitorOverview"
+                },
+                "assignDebitorManualOverview": {
+                    "viewName": "assignDebitorManualOverview"
+                },
+                "resolveTarifMismatch": {
+                    "viewName": "resolveTarifMismatch"
+                },
+                "changeDebitor": {
+                    "viewName": "changeDebitor"
+                },
+                "createNewSAPDebitors": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearAggregation": true,
+                    "viewName": "createNewSAPDebitors"
+                }
+            }
+        }
+    },
+    "sap.platform.abap": {
+        "uri": "/sap/bc/ui5_ui5/sap/zfp_process",
+        "_version": "1.1.0"
+    }
+}

@@ -1,0 +1,19 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout">
+	<Popover title="Druckstatus" class="sapUiContentPadding" contentHeight="100%" contentWidth="100%" placement="Auto" modal="true" >
+		<content>
+			<l:VerticalLayout>
+
+		<Text width = "100%" text = "{WebSocket_Updates>/PrintStateText}"/>
+			<BusyIndicator text="... Druck läuft" class="sapUiSmallMarginBottom" visible = "{WebSocket_Updates>/PrintStateBusyIndicatorVisible}" />
+			</l:VerticalLayout>
+					
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="Schliessen" press="onClosePrintStatus"/>
+			</Toolbar>
+		</footer>
+	</Popover>
+	
+</core:FragmentDefinition>

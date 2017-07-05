@@ -1,0 +1,14 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:layout="sap.ui.layout"
+	controllerName="ch.bielbienne.HolidayPassHolidayPassProcessing.controller.resolveTarifMismatch" xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<Page title="Ungleiche Tarife pro Rechnung auflösen" showNavButton="true" navButtonPress= "handleBackButton">
+				<content>
+					<layout:VerticalLayout id="oVerticalLayoutResolvTarifMismatch">
+						<Text text = "Selectieren Sie pro SAP Debitor den passenden Tarif." />
+					</layout:VerticalLayout>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

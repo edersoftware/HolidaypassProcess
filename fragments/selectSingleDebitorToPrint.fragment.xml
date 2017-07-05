@@ -1,0 +1,41 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<TableSelectDialog contentWidth = "100%" noDataText="Kein Debitor gefunden" title= "Suche Debitor für Rechnungsdruck" search="handleSearchSingleInvoiceToPrint" confirm="handleCloseSingleInvoiceToPrint" cancel="handleCloseSingleInvoiceToPrint"
+		items="{ path : 'ZFP_SRV>/DebitorSet', sorter : { path : 'Fullname', descending : false } }">
+		<ColumnListItem>
+			<cells>
+				<Text text="{ZFP_SRV>Fullname}"/>
+				<Text text="{ZFP_SRV>Street}"/>
+				<Text text="{ZFP_SRV>Zip}"/>
+				<Text text="{ZFP_SRV>City}"/>
+				<Text text="{ZFP_SRV>SapDebitorId}"/>
+			</cells>
+		</ColumnListItem>
+		<columns>
+			<Column>
+				<header>
+					<Text text="Name"/>
+				</header>
+			</Column>
+			<Column>
+				<header>
+					<Text text="Strasse"/>
+				</header>
+			</Column>
+			<Column>
+				<header>
+					<Text text="PLZ"/>
+				</header>
+			</Column>
+			<Column>
+				<header>
+					<Text text="Ort"/>
+				</header>
+			</Column>
+			<Column hAlign="Right">
+				<header>
+					<Text text="SAP Debitor Id"/>
+				</header>
+			</Column>
+		</columns>
+	</TableSelectDialog>
+</core:FragmentDefinition>

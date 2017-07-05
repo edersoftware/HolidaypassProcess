@@ -1,0 +1,14 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:layout="sap.ui.layout"
+	controllerName="ch.bielbienne.HolidayPassHolidayPassProcessing.controller.clearDebitorDoublets" xmlns:html="http://www.w3.org/1999/xhtml">
+	<App  id="app">
+		<pages>
+			<Page title="Doppelte Rechnungen entfernen" showNavButton="true" navButtonPress= "handleBackButton">
+				<content>
+					<layout:VerticalLayout id="oVerticalLayoutDoubletsMatching">
+						<Text text = "Selectieren Sie pro SAP Debitor den Master Ferienpass Debitor. Diesem werden dann alle Doubletten zugeordnet." />
+					</layout:VerticalLayout>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

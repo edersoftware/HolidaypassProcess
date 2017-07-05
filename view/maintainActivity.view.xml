@@ -1,0 +1,45 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="ch.bielbienne.HolidayPassHolidayPassProcessing.controller.maintainActivity" xmlns:html="http://www.w3.org/1999/xhtml">
+	<App id="app">
+		<pages>
+			<Page title="Aktivitäten anzeigen / bearbeiten" showNavButton="true" navButtonPress= "handleBackButton">
+				<content>
+						<Table mode="None" id="oTableTableActivities">
+									<headerToolbar>
+										<OverflowToolbar>
+											<Title text="Aktivitäten" level="H2"/>
+											<ToolbarSpacer/>
+											<Button id="editButtonActivity" text="Editieren" type="Transparent" press="onEditActivity"/>
+											<Button id="saveButtonActivity" text="Speichern" type="Transparent" press="onSaveActivity" visible="false"/>
+											<Button id="cancelButtonActivity" text="Abbrechen" type="Transparent" press="onCancelActivity" visible="false"/>
+										</OverflowToolbar>
+									</headerToolbar>
+									<columns>
+										<Column width="100px">
+											<Text text="Aktivitäts-Id"/>
+										</Column>
+										<Column width="150px">
+											<Text text="Beginn der Aktivität"/>
+										</Column>
+										<Column width="150px">
+											<Text text="Ende der Aktivität"/>
+										</Column>
+										<Column width="130px">
+											<Text text="Nachverrechnete Aktivität"/>
+										</Column>
+											<Column>
+											<Text text="Title D"/>
+										</Column>
+											<Column>
+											<Text text="Titel F"/>
+										</Column>
+											<Column id = "oColumPartOfDay" width="120px">
+											<Text text="Morgen / Nachmittag / Ganzer Tag"/>
+										</Column>
+									</columns>
+								</Table>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

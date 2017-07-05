@@ -1,0 +1,129 @@
+<mvc:View controllerName="ch.bielbienne.HolidayPassHolidayPassProcessing.controller.Main" xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:u="sap.ui.unified"
+	displayBlock="true" xmlns="sap.m">
+	<App id="app">
+		<pages>
+			<Page title="Ferienpass">
+				<content>
+					<IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding" select="handleOnSelectTabBar">
+						<items>
+							<IconTabFilter text="Altdaten löschen / Suchdaten aufbereiten" key="ResetProcessingStep">
+								<Text class="sapUiSmallMarginBottom" text="Mit diesem Schritt werden die bereits verrechneten Daten in Backupdaten weggeschrieben"/>
+								<VBox alignItems="Center" justifyContent="Center" width="100%">
+									<!--<Button width="200px" text="Altdaten wegsichern" press="handleStoreOldData"/>-->
+									<Button width="200px" text="Suchdaten aufbereiten" press="handleCreateKN1SearchData"/>
+									<Button width="200px" text="Daten löschen" press="handleClearAllData"/>
+								</VBox>
+							</IconTabFilter>
+							<IconTabFilter text="Buchungs- / Aktivitätsdaten importieren und bearbeiten" key="ImportBookingStatementsStep">
+								<Text class="sapUiSmallMarginBottom"
+									text="In diesem Schritt werden die Buchungsdaten und Aktivitätsdaten von Ferienpass importiert und verarbeitet"/>
+								<HBox alignItems="Center" justifyContent="Center" width="100%">
+									<Text text="Ferienpass Periode" class="sapUiMediumMarginEnd"></Text>
+									<Select forceSelection="true" id="oSelectPeriodImportingTab" items="{ path: 'settings>/periods' }">
+										<core:Item key="{settings>Id}" text="{settings>Text}"/>
+									</Select>
+								</HBox>
+								<Panel width="auto" class="sapUiResponsiveMargin">
+									<headerToolbar>
+										<Toolbar height="3rem">
+											<Title text="Buchungsdaten importieren"/>
+										</Toolbar>
+									</headerToolbar>
+									<content>
+										<layout:VerticalLayout>
+											<u:FileUploader buttonText = "Buchungsfile auswählen" id="fileUploaderBooking" uploadUrl="/sap/opu/odata/sap/ZFP_SRV/FileSet" width="400px" tooltip="Ferienpass Daten hochladen"
+												uploadComplete="handleUploadComplete" useMultipart="false"/>
+											<Button id="oButtonUploadBooking" text="Ferienpass Buchungsdaten hochladen" press="handleUploadPress"/>
+											<Text text="Erfolgreich hochgeladene Items {WebSocket_Updates>/UploadState_successfull}" visible="{WebSocket_Updates>/UploadState_visible}"/>
+											<Text text="Fehlerhaft hochgeladene Items {WebSocket_Updates>/UploadState_failed}" visible="{WebSocket_Updates>/UploadState_visible}"/>
+										</layout:VerticalLayout>
+									</content>
+								</Panel>
+								<Panel width="auto" class="sapUiResponsiveMargin">
+									<headerToolbar>
+										<Toolbar height="3rem">
+											<Title text="Aktivitätsdaten importieren"/>
+										</Toolbar>
+									</headerToolbar>
+									<content>
+										<layout:VerticalLayout>
+											<u:FileUploader buttonText = "Aktivitätsfile auswählen" id="fileUploaderActivity" uploadUrl="/sap/opu/odata/sap/ZFP_SRV/FileSet" width="400px" tooltip="Ferienpass Daten hochladen"
+												uploadComplete="handleUploadComplete" useMultipart="false"></u:FileUploader>
+											<Button id="oButtonUploadActivity" text="Ferienpass Aktivitätsdaten hochladen" press="handleUploadPress"/>
+											<Text text="Erfolgreich hochgeladene Items {WebSocket_Updates>/UploadStateAct_successfull}"
+												visible="{WebSocket_Updates>/UploadStateAct_visible}"/>
+											<Text text="Nicht hochgeladene Aktivitäten, da keine Buchung dazu {WebSocket_Updates>/UploadStateAct_act_with_no_booking}"
+												visible="{WebSocket_Updates>/UploadStateAct_visible}"/>
+											<Text text="Fehlerhaft hochgeladene Items {WebSocket_Updates>/UploadStateAct_failed}" visible="{WebSocket_Updates>/UploadStateAct_visible}"/>
+										</layout:VerticalLayout>
+									</content>
+								</Panel>
+								<Panel width="auto" class="sapUiResponsiveMargin">
+									<headerToolbar>
+										<Toolbar height="3rem">
+											<Title text="Aus den Buchungsdaten Fakturen bilden"/>
+										</Toolbar>
+									</headerToolbar>
+									<content>
+										<layout:VerticalLayout>
+											<Button text="Buchungen zu Fakturen gruppieren" press="handleGroupBSPress"/>
+											<Text text="Verarbeitete Items {WebSocket_Updates>/GroupBS_items}" visible="{WebSocket_Updates>/GroupBS_visible}"/>
+											<Text text="Anzahl Debitoren {WebSocket_Updates>/GroupBS_newDebitors}" visible="{WebSocket_Updates>/GroupBS_visible}"/>
+										</layout:VerticalLayout>
+									</content>
+								</Panel>
+								<Panel width="auto" class="sapUiResponsiveMargin">
+									<headerToolbar>
+										<Toolbar height="3rem">
+											<Title text="Aktivitäten bearbeiten"/>
+										</Toolbar>
+									</headerToolbar>
+									<content>
+										<layout:VerticalLayout>
+											<Button text="Aktivitäten anzeigen / bearbeiten" press="handleMaintainActivity"/>
+										</layout:VerticalLayout>
+									</content>
+								</Panel>
+							</IconTabFilter>
+							<IconTabFilter text="Debitorenmanagement" key="DebitorenStep">
+								<Text class="sapUiSmallMarginBottom" text="Hier werden die Ferienpass-Debitoren verwaltet."/>
+								<VBox alignItems="Center" justifyContent="Center" width="100%">
+									<Button width="400px" text="Automatisches Debitorenmatching durchführen" press="handleStartAutomaticDebitorenMatching"/>
+									<Text text="Anzahl Debitoren total {WebSocket_Updates>/MatchDeb_total}" visible="{WebSocket_Updates>/MatchDeb_visible}"/>
+									<Text text="Anzahl Debitoren nicht gematched in diesem Lauf {WebSocket_Updates>/MatchDeb_not_matched}"
+										visible="{WebSocket_Updates>/MatchDeb_visible}"/>
+									<Text text="Anzahl Debitoren komplett gematched in diesem Lauf {WebSocket_Updates>/MatchDeb_full}"
+										visible="{WebSocket_Updates>/MatchDeb_visible}"/>
+									<Text text="Anzahl Debitoren teilweise gematched in diesem Lauf {WebSocket_Updates>/MatchDeb_part}"
+										visible="{WebSocket_Updates>/MatchDeb_visible}"/>
+									<Button width="400px" text="Manuelles Debitorenmatching durchführen" press="handleStartManualDebitorMatching"/>
+									<Button width="400px" class="sapUiMediumMarginTop" text="Fehlende SAP DebitorenIds generieren" press="handleOnCreateNewSAPDebitors"/>
+									<Button width="400px" class="sapUiLargeMarginTop" text="Debitoren editieren (inkl. Dubletten entfernen)" press="handleDebitorEditing"/>
+								</VBox>
+							</IconTabFilter>
+							<IconTabFilter text="Rechnungsmanagement / Druck / Exporte" key="ExportPrintStep">
+								<Text class="sapUiSmallMarginBottom" text="In diesem Schritt werden Rechnungsnummern erstellt und Rechnungsexporte und Drucke durchgeführt"/>
+								<VBox alignItems="Center" justifyContent="Center" width="100%">
+									<HBox alignItems="Center" justifyContent="Center" width="100%">
+										<Text text="Ferienpass Periode" class="sapUiMediumMarginEnd"></Text>
+										<Select forceSelection="true" id="oSelectPeriod" items="{ path: 'settings>/periods' }">
+											<core:Item key="{settings>Id}" text="{settings>Text}"/>
+										</Select>
+									</HBox>
+									<Button width="400px" text="PDF Formularanzeige einzelner Rechungen" press="handeTestPrint"/>
+									<Button width="400px" text='Prüfung "Einheitlicher Tarif pro Rechnung" starten' press="handeCheckTarif"/>
+									<Button width="400px" text="Rechnungsnummern generieren" press="handleCreateInvoiceNumbers"/>
+									<Button width="400px" text="Rechnungsprotokoll erzeugen" press="handleCreateInvoiceProtocoll"/>
+									<Button width="400px" text="Export zu SAP Debitoren Schnittstelle erzeugen" press="handleCreateSDExport"/>
+									<Button width="400px" text="Rechnungen drucken" press="handlePrint"/>
+									<MessageStrip id="oMessageStripProductionCheck" text="" type="Warning" showIcon="true" showCloseButton="false" visible="false"></MessageStrip>
+								</VBox>
+							</IconTabFilter>
+						</items>
+					</IconTabBar>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

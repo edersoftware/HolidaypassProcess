@@ -1,0 +1,55 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="ch.bielbienne.HolidayPassHolidayPassProcessing.controller.testPrintInvoices" xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<Page title="Testdruck von Rechnungen" showNavButton="true" navButtonPress="handleBackButton">
+				<content>
+					<Table mode="None" id="oTableTestPrint" items="{ path: 'ZFP_SRV>/DebitorSet', sorter: { path: 'Lastname' } }">
+						<columns>
+							<Column>
+								<Text text="Debitoren-Id"/>
+							</Column>
+							<Column>
+								<Text text="SAP Debitor-Id"/>
+							</Column>
+							<Column>
+								<Text text="Vorname"/>
+							</Column>
+							<Column>
+								<Text text="Nachname"/>
+							</Column>
+							<Column>
+								<Text text="Namenszusatz"/>
+							</Column>
+							<Column>
+								<Text text="Strasse"/>
+							</Column>
+							<Column>
+								<Text text="PLZ"/>
+							</Column>
+							<Column>
+								<Text text="Ort"/>
+							</Column>
+							<Column/>
+						</columns>
+						<items>
+							<ColumnListItem>
+								<cells>
+									<Text text="{ZFP_SRV>DebitorId}"/>
+									<Text text="{ZFP_SRV>SapDebitorId}"/>
+									<Text text="{ZFP_SRV>Firstname}"/>
+									<Text text="{ZFP_SRV>Lastname}"/>
+									<Text text="{ZFP_SRV>AdditionalName}"/>
+									<Text text="{ZFP_SRV>Street}"/>
+									<Text text="{ZFP_SRV>Zip}"/>
+									<Text text="{ZFP_SRV>City}"/>
+									<Button text="Testdruck" press="handleOnTestPrint"></Button>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

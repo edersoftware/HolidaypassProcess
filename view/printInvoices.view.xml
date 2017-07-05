@@ -1,0 +1,49 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" xmlns="sap.m" xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml" controllerName="ch.bielbienne.HolidayPassHolidayPassProcessing.controller.printInvoices">
+	<App>
+		<pages>
+			<Page title="Rechnungen drucken" showNavButton="true" navButtonPress="handleBackButton">
+				<content>
+					<Panel headerText="Einstellung">
+							<VBox class="sapUiSmallMargin">
+								<Text text="Drucke direkt ausgeben oder nur in Spool stellen" textAlign="Center"/>
+					<RadioButtonGroup id = "oRadioButtonGroupPrinting">
+				<buttons>
+				
+					<RadioButton id="oRadioButtonDirect" text="Drucke direkt ausdrucken"/>
+					<RadioButton id="oRadioButtonSpool" text="Drucke in Spool stellen"/>
+					<RadioButton id="oRadioButtonFilesystem" text="Erstelle PDFs und lege diese ins Print Verzeichnis"/>
+				</buttons>
+			</RadioButtonGroup>
+			</VBox>
+					</Panel>
+					<Panel headerText="Einzeldruck">
+						<Button id= "oButtonPrintSingleInvoice" text="Einzelne Rechnung drucken" width="500px" press="handlePrintSingleInvoice"/>
+					</Panel>
+					<Panel id="__panel0" headerText="Massendruck">
+						<content>
+							<l:VerticalLayout width="100%">
+								<HBox alignItems="Center" justifyContent="Start" width="100%">
+									<Label text="Drucken in Etappen" class="sapUiLargeMarginEnd"/>
+									<Switch id = "oSwitchPrintType" state="true" customTextOn="Ja" customTextOff="Nein" change="handleChangePrintType"/>
+								</HBox>
+								<f:SimpleForm id="oSimpleFormPrintInParts" editable="true" layout="ResponsiveGridLayout" title="Druckeinstellungen" labelSpanXL="5"
+									labelSpanL="5" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0"
+									columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
+									<f:content>
+										<Label text="Anzahl Rechnungen in der ersten Etappe (z.B. 10)"/>
+										<Input id="oInputFirstPart" value="10"/>
+										<Label text="Anzahl Rechnungen in den folgenden Etappen (z.B. 200)"/>
+										<Input id="oInputOtherParts" value="200"/>
+									</f:content>
+								</f:SimpleForm>
+								<Text visible="false" text="Druck der Rechnungen in einem Druckauftrag" id="oTextPrintInOnePart"/>
+								<Button text="Druck starten" press="handleStartPrint"/>
+							</l:VerticalLayout>
+						</content>
+					</Panel>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

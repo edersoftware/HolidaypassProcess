@@ -1,0 +1,84 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form"
+	controllerName="ch.bielbienne.HolidayPassHolidayPassProcessing.controller.AssignDebitorManual" xmlns:html="http://www.w3.org/1999/xhtml">
+	<App id="app">
+		<pages>
+			<Page title="Ferienpass-Debitor an SAP Debitor zuweisen" showNavButton="true" navButtonPress="handleBackButton">
+				<content>
+					<Panel width="auto" class="sapUiResponsiveMargin">
+						<headerToolbar>
+							<Toolbar height="3rem">
+								<Title text="Ferienpass-Debitor"/>
+							</Toolbar>
+						</headerToolbar>
+						<content>
+							<form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12"
+								adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
+								singleContainerFullSize="false" id="oSimpleFormDebitor">
+								<form:content>
+									<Label text="Debitoren-Id"/>
+									<Text text="{DebitorId}" id="oTextDebitorId"/>
+									<Label text="Vorname"/>
+									<Text text="{Firstname}" id="oTextFirstname"/>
+									<Label text="Nachname"/>
+									<Text text="{Lastname}" id="oTextLastname"/>
+									<Label text="Namenszusatz"/>
+									<Text text="{AdditionalName}"/>
+									<Label text="Strasse"/>
+									<Text text="{Street}" id="oTextStreet"/>
+									<Label text="PLZ"/>
+									<Text text="{Zip}"/>
+									<Label text="Ort"/>
+									<Text text="{City}"/>
+								</form:content>
+							</form:SimpleForm>
+						</content>
+					</Panel>
+					<layout:VerticalLayout>
+						<layout:HorizontalLayout>
+							<Button text="Suche mit Namen" press="handleSearchSelection" id="oButtonSearchWithName"/>
+							<Button text="Suche mit Strasse" press="handleSearchSelection" id="oButtonSearchWithStreet"/>
+						</layout:HorizontalLayout>
+						<FlexBox height="100px" alignItems="Center" justifyContent="Start" id="oFlexBoxStartSearch" visible="false">
+							<items>
+								<Label text="Suchtext ( * steht für kein bis n Zeichen )" width="300px"/>
+								<Input type="Text" id="oInputSearchSearchText" width="400px"/>
+								<Button text="Suche starten" press="handleStartSearch" id="oButtonStartSearch"/>
+							</items>
+						</FlexBox>
+						<Table mode="SingleSelect" selectionChange="onSelectDebitorSearchResult" noDataText="Nichts gefunden" id="oTableDebitorSearchResult"
+							inset="false" items="{ path: 'SearchResult>/result/', sorter: { path: 'Fullname' } }">
+							<columns>
+								<Column>
+									<Text text="SAP Debitoren-Id"/>
+								</Column>
+								<Column>
+									<Text text="Name (Vor- und Nachname)"/>
+								</Column>
+								<Column>
+									<Text text="Strasse"/>
+								</Column>
+								<Column>
+									<Text text="PLZ"/>
+								</Column>
+								<Column>
+									<Text text="Ort"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem >
+									<cells>
+										<Text text="{SearchResult>SapDebitorId}"/>
+										<Text text="{SearchResult>Fullname}"/>
+										<Text text="{SearchResult>Street}"/>
+										<Text text="{SearchResult>Zip}"/>
+										<Text text="{SearchResult>City}"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</layout:VerticalLayout>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

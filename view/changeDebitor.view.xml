@@ -1,0 +1,37 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:form="sap.ui.layout.form"
+	controllerName="ch.bielbienne.HolidayPassHolidayPassProcessing.controller.changeDebitor" xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<Page title="Debitor anpassen">
+				<content>
+					<form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12"
+						adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
+						singleContainerFullSize="false" id="oSimpleFormDebitorChange">
+						<form:content>
+							<Label text="Debitoren-Id"/>
+							<Text text="{DebitorId}" id="oTextDebitorId"/>
+							<Label text="SAP Debitor Id"/>
+							<Input value="{SapDebitorId}" id="oInputSapDebitorId"/>
+							<Label text="Vorname"/>
+							<Input value="{Firstname}" id="oInputFirstname"/>
+							<Label text="Nachname"/>
+							<Input value="{Lastname}" id="oInputLastname"/>
+							<Label text="Namenszusatz"/>
+							<Input value="{AdditionalName}" id="oInputAdditionalName"/>
+							<Label text="Strasse"/>
+							<Input value="{Street}" id="oInputStreet"/>
+							<Label text="PLZ"/>
+							<Input value="{Zip}" id="oInputZip"/>
+							<Label text="Ort"/>
+							<Input value="{City}" id="oInputCity"/>
+							<Label text="Guthaben"/>
+							<Input value="{Refound}" id="oInputRefound"/>
+						</form:content>
+					</form:SimpleForm>
+					<Button text="Speichern und zurück" press="handleOnSaveAndReturn"></Button>
+					<Button text="Änderungen verwerfen und zurück" press="handleOnCancelAndReturn"></Button>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

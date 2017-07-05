@@ -1,0 +1,56 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="ch.bielbienne.HolidayPassHolidayPassProcessing.controller.assignDebitorManualOverview"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<App id="app">
+		<pages>
+			<Page title="Ferienpassdebitoren für manuelle Zuweisung" showNavButton="true" navButtonPress="handleBackButton">
+				<content>
+					<Table mode="SingleSelect" selectionChange="handleSelectDebitorToMap" id="oTableDebitorManualMapping"
+						items="{ path: 'ZFP_SRV>/DebitorSet', sorter: { path: 'Lastname' }, filters: [{path: 'NotMatch', operator: 'EQ', value1: 'true'}] }">
+						<headerToolbar>
+							<Toolbar>
+								<Title text="Ferienpass-Debitoren zur MANUELLEN Zuweisung zu SAP Debitoren" level="H2"/>
+							</Toolbar>
+						</headerToolbar>
+						<columns>
+							<Column>
+								<Text text="Debitoren-Id"/>
+							</Column>
+							<Column>
+								<Text text="Vorname"/>
+							</Column>
+							<Column>
+								<Text text="Nachname"/>
+							</Column>
+							<Column>
+								<Text text="Namenszusatz"/>
+							</Column>
+							<Column>
+								<Text text="Strasse"/>
+							</Column>
+							<Column>
+								<Text text="PLZ"/>
+							</Column>
+							<Column>
+								<Text text="Ort"/>
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem>
+								<cells>
+									<Text text="{ZFP_SRV>DebitorId}"/>
+									<Text text="{ZFP_SRV>Firstname}"/>
+									<Text text="{ZFP_SRV>Lastname}"/>
+									<Text text="{ZFP_SRV>AdditionalName}"/>
+									<Text text="{ZFP_SRV>Street}"/>
+									<Text text="{ZFP_SRV>Zip}"/>
+									<Text text="{ZFP_SRV>City}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>
