@@ -89,7 +89,7 @@
 							<IconTabFilter text="Debitorenmanagement" key="DebitorenStep">
 								<Text class="sapUiSmallMarginBottom" text="Hier werden die Ferienpass-Debitoren verwaltet."/>
 								<VBox alignItems="Center" justifyContent="Center" width="100%">
-									<Button width="400px" text="Automatisches Debitorenmatching durchführen" press="handleStartAutomaticDebitorenMatching"/>
+									<Button width="450px" text="Automatisches Debitorenmatching durchführen" press="handleStartAutomaticDebitorenMatching"/>
 									<Text text="Anzahl Debitoren total {WebSocket_Updates>/MatchDeb_total}" visible="{WebSocket_Updates>/MatchDeb_visible}"/>
 									<Text text="Anzahl Debitoren nicht gematched in diesem Lauf {WebSocket_Updates>/MatchDeb_not_matched}"
 										visible="{WebSocket_Updates>/MatchDeb_visible}"/>
@@ -97,9 +97,11 @@
 										visible="{WebSocket_Updates>/MatchDeb_visible}"/>
 									<Text text="Anzahl Debitoren teilweise gematched in diesem Lauf {WebSocket_Updates>/MatchDeb_part}"
 										visible="{WebSocket_Updates>/MatchDeb_visible}"/>
-									<Button width="400px" text="Manuelles Debitorenmatching durchführen" press="handleStartManualDebitorMatching"/>
-									<Button width="400px" class="sapUiMediumMarginTop" text="Fehlende SAP DebitorenIds generieren" press="handleOnCreateNewSAPDebitors"/>
-									<Button width="400px" class="sapUiLargeMarginTop" text="Debitoren editieren (inkl. Dubletten entfernen)" press="handleDebitorEditing"/>
+									<Button width="450px" text="Manuelles Debitorenmatching durchführen" press="handleStartManualDebitorMatching"/>
+									<Button width="450px" text="Manuelles Debitorenmatching sichern" press="handleStartManualDebitorSave"/>
+									<Button width="450px" text="Manuelles Debitorenmatching aus Sicherung wiederherstellen" press="handleStartManualDebitorRestore"/>
+									<Button width="450px" class="sapUiMediumMarginTop" text="Fehlende SAP DebitorenIds generieren" press="handleOnCreateNewSAPDebitors"/>
+									<Button width="450px" class="sapUiLargeMarginTop" text="Debitoren editieren (inkl. Dubletten entfernen)" press="handleDebitorEditing"/>
 								</VBox>
 							</IconTabFilter>
 							<IconTabFilter text="Rechnungsmanagement / Druck / Exporte" key="ExportPrintStep">

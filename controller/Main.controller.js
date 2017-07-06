@@ -91,7 +91,36 @@ sap.ui.define([
 				error: function(oError) {}
 			});
 		},
-
+		
+		handleStartManualDebitorSave : function(){
+			this.getOwnerComponent().getModel("ZFP_SRV").callFunction("/saveDebitorMapping", {
+				method: "GET",
+				success: function(oData, response) {
+				   MessageBox.success(oData.message);
+				},
+				error: function(oError) {
+					MessageBox.error("Technisches Problem aufgetreten, bitte SAP CCC informieren.");
+				},
+				async: false
+			});
+		},
+		
+		handleStartManualDebitorRestore : function(){
+				this.getOwnerComponent().getModel("ZFP_SRV").callFunction("/restoreDebitorMapping", {
+				method: "GET",
+				success: function(oData, response) {
+				   MessageBox.success(oData.message);
+				},
+				error: function(oError) {
+					MessageBox.error("Technisches Problem aufgetreten, bitte SAP CCC informieren.");
+				},
+				async: false
+			});
+			
+			
+			
+		},
+		
 		_updateProductiveCheck: function() {
 			var sPeriod = this.getView().byId("oSelectPeriod").getSelectedKey();
 			var that = this;
