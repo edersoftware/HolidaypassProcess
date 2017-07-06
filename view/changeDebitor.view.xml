@@ -25,7 +25,7 @@
 							<Label text="Ort"/>
 							<Input value="{City}" id="oInputCity"/>
 							<Label text="Guthaben"/>
-							<Input value="{Refound}" id="oInputRefound"/>
+							<Input value="{ path:'Refound', formatter: '.convertToNumber' }" type="sap.m.InputType.Number" id="oInputRefound" liveChange = "handleCheckRefound" />
 						</form:content>
 					</form:SimpleForm>
 					<Button text="Speichern und zurück" press="handleOnSaveAndReturn"></Button>

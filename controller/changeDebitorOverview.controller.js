@@ -14,9 +14,13 @@ sap.ui.define([
 		},
 
 		handleBackButton: function() {
+			sap.ui.getCore().byId("oShellApp").setAppWidthLimited(true);
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-
 			oRouter.navTo("Main");
+		},
+		
+		convertToNumber:function(sNumber){
+			return parseInt(sNumber);
 		},
 
 		handleOnChangeDebitor: function(oEvent) {
@@ -64,6 +68,7 @@ sap.ui.define([
 		},
 
 		_onRouteMatched: function(oEvent) {
+			sap.ui.getCore().byId("oShellApp").setAppWidthLimited(false);
 			var oTable = this.getView().byId("oTableDebitorToChange");
 			oTable.getModel("ZFP_SRV").refresh(true);
 			oTable.removeSelections(true);

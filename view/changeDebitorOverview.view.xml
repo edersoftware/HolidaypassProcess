@@ -4,8 +4,7 @@
 		<pages>
 			<Page title="Debitoren editieren" showNavButton="true" navButtonPress="handleBackButton">
 				<content>
-					<Table mode="None" id="oTableDebitorToChange"
-						items="{ path: 'ZFP_SRV>/DebitorSet', sorter: { path: 'Lastname' } }">
+					<Table mode="None" id="oTableDebitorToChange" items="{ path: 'ZFP_SRV>/DebitorSet', sorter: { path: 'Lastname' } }">
 						<headerToolbar>
 							<Toolbar>
 								<Title text="Ferienpass-Debitoren" level="H2"/>
@@ -39,6 +38,9 @@
 							<Column>
 								<Text text="Ort"/>
 							</Column>
+							<Column>
+								<Text text="Guthaben"/>
+							</Column>
 							<Column/>
 						</columns>
 						<items>
@@ -52,6 +54,7 @@
 									<Text text="{ZFP_SRV>Street}"/>
 									<Text text="{ZFP_SRV>Zip}"/>
 									<Text text="{ZFP_SRV>City}"/>
+									<Text type="Number" text=" { path:'ZFP_SRV>Refound', formatter: '.convertToNumber' }"/>
 									<Button text="Anpassen" press="handleOnChangeDebitor"></Button>
 								</cells>
 							</ColumnListItem>

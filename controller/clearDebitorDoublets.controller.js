@@ -71,6 +71,12 @@ sap.ui.define([
 					that.getView().getModel("debitor_doubl").setProperty("/", aDebitorsToConsUI);
 					// Draw UI
 					oVerticalLayoutToDrawItems.destroyContent();
+					if(aDebitorsToConsUI.length === 0){
+						oVerticalLayoutToDrawItems.addContent(new sap.m.Title({
+													level: "H3",
+													text: "Keine Dubletten gefunden."
+												}));
+					}
 					for (var i = 0; aDebitorsToConsUI.length > i; i++) {
 						var sSapDebitorTitle = "SAP Debitor Nr.  " + aDebitorsToConsUI[i].SapDebitorId +
 							" ,    " + aDebitorsToConsUI[i].FullnameSap + " ,    " + aDebitorsToConsUI[i].StreetSap + " , " + aDebitorsToConsUI[i].ZipSap +

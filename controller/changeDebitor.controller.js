@@ -20,6 +20,21 @@ sap.ui.define([
 			oSimpleFormDebitor.bindElement("/DebitorSet(guid'" + sDebitorId + "')");
 		},
 
+		convertToNumber: function(sNumber) {
+			return parseInt(sNumber);
+		},
+
+		handleCheckRefound: function(oEvent) {
+			var sNewNumber = oEvent.getParameter("newValue");
+			var oInput = oEvent.getSource();
+			var iNewNumber = parseInt(sNewNumber);
+			if (sNewNumber % iNewNumber === 0) {
+				oInput.setValue(iNewNumber);
+			} else {
+				MessageBox.error("Nur ganze Zahlen erlaubt!");
+			}
+		},
+
 		handleOnSaveAndReturn: function() {
 			var oModel = this.getOwnerComponent().getModel("ZFP_SRV");
 			var sPath = this.getView().byId("oSimpleFormDebitorChange").getBindingContext().sPath;
@@ -45,11 +60,13 @@ sap.ui.define([
 					},
 					asynch: false
 				});
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.navTo("ChangeDebitorOverview");
+			this.goBackToOverview();
 		},
 
 		handleOnCancelAndReturn: function() {
+			this.goBackToOverview();
+		},
+		goBackToOverview : function() {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("ChangeDebitorOverview");
 		}
