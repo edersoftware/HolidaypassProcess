@@ -17,7 +17,6 @@ sap.ui.define([
 		onInit: function() {
 
 			var oModel = new sap.ui.model.json.JSONModel({
-				//		UploadBS_Corrupt_File: false,
 				UploadState_sccessfull: 0,
 				UploadState_failed: 0,
 				UploadState_visible: false,
@@ -176,21 +175,20 @@ sap.ui.define([
 					switch (sSelectedButton) {
 						case "Ja, alle Daten löschen":
 							var oModel = that.getOwnerComponent().getModel('ZFP_SRV');
+							that.getView().byId("oPageMain").setBusy(true);
 							oModel.callFunction("/deleteAllData", {
 								method: "GET",
 								success: function(oData, response) {
-									if (oData.ok) {
-										MessageBox.success(oData.message);
-									} else {
+									if (!oData.ok) {
 										MessageBox.error(oData.message);
-									}
+									} 
 								},
 								error: function(oError) {
 									MessageBox.error("Technischer Fehler, bitte SAP CCC informieren");
 								},
 								async: false
 							});
-
+							that.getView().byId("oPageMain").setBusy(false);
 							break;
 						case "Abbrechen":
 							// Nichts zu tun !						

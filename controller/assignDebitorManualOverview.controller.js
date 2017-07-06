@@ -33,7 +33,6 @@ sap.ui.define([
 		 * @memberOf ch.bielbienne.HolidayPassHolidayPassProcessing.view.assignDebitorManualOverview
 		 */
 		onInit: function() {
-
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("AssignDebitorManualOverview").attachMatched(this._onRouteMatched, this);
 		},

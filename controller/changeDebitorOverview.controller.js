@@ -6,11 +6,9 @@ sap.ui.define([
 
 	return Controller.extend("ch.bielbienne.HolidayPassHolidayPassProcessing.controller.changeDebitorOverview", {
 
-		handleOnMerge: function(oEvent) {
-
+		handleOnMerge: function() {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("ClearDebitorDoublets");
-
 		},
 
 		handleBackButton: function() {
@@ -18,8 +16,8 @@ sap.ui.define([
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("Main");
 		},
-		
-		convertToNumber:function(sNumber){
+
+		convertToNumber: function(sNumber) {
 			return parseInt(sNumber);
 		},
 
@@ -40,7 +38,7 @@ sap.ui.define([
 			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
 			oModel.callFunction("/correctBielCityName", {
 				method: "GET",
-				success: function(oData, response) {
+				success: function(oData) {
 					if (oData.ok) {
 						MessageBox.success(oData.message);
 						var oTable = that.getView().byId("oTableDebitorToChange");
@@ -50,12 +48,11 @@ sap.ui.define([
 						MessageBox.error(oData.message);
 					}
 				},
-				error: function(oError) {
-					var x = oError;
+				error: function() {
+					MessageBox.error("Es ist ein technischer Fehler aufgetreten. Informieren Sie das SAP CCC");
 				},
 				async: false
 			});
-
 		},
 		/**
 		 * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -67,7 +64,7 @@ sap.ui.define([
 			oRouter.getRoute("ChangeDebitorOverview").attachMatched(this._onRouteMatched, this);
 		},
 
-		_onRouteMatched: function(oEvent) {
+		_onRouteMatched: function() {
 			sap.ui.getCore().byId("oShellApp").setAppWidthLimited(false);
 			var oTable = this.getView().byId("oTableDebitorToChange");
 			oTable.getModel("ZFP_SRV").refresh(true);

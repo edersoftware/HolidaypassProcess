@@ -3,7 +3,7 @@
 	displayBlock="true" xmlns="sap.m">
 	<App id="app">
 		<pages>
-			<Page title="Ferienpass">
+			<Page title="Ferienpass" id="oPageMain">
 				<content>
 					<IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding" select="handleOnSelectTabBar">
 						<items>
@@ -11,7 +11,7 @@
 								<Text class="sapUiSmallMarginBottom" text="Mit diesem Schritt werden die bereits verrechneten Daten in Backupdaten weggeschrieben"/>
 								<VBox alignItems="Center" justifyContent="Center" width="100%">
 									<!--<Button width="200px" text="Altdaten wegsichern" press="handleStoreOldData"/>-->
-									<Button width="200px" text="Suchdaten aufbereiten" press="handleCreateKN1SearchData"/>
+									<Button id="oButtonCreateKNA1SearchData" width="200px" text="Suchdaten aufbereiten" press="handleCreateKN1SearchData"/>
 									<Button width="200px" text="Daten löschen" press="handleClearAllData"/>
 								</VBox>
 							</IconTabFilter>

@@ -13,7 +13,6 @@ sap.ui.define([
 
 		_onRouteMatched: function(oEvent) {
 			var sDebitorId = oEvent.getParameter("arguments").debitorId;
-
 			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
 			var oSimpleFormDebitor = this.getView().byId("oSimpleFormDebitorChange");
 			oSimpleFormDebitor.setModel(oModel);
