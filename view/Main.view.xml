@@ -3,9 +3,9 @@
 	displayBlock="true" xmlns="sap.m">
 	<App id="app">
 		<pages>
-			<Page title="Ferienpass" id="oPageMain">
+			<Page title="Ferienpass" id = "oPageMain" busyIndicatorDelay = "1">
 				<content>
-					<IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding" select="handleOnSelectTabBar">
+					<IconTabBar id="oIconTabBarMainPage" class="sapUiResponsiveContentPadding" select="handleOnSelectTabBar">
 						<items>
 							<IconTabFilter text="Altdaten löschen / Suchdaten aufbereiten" key="ResetProcessingStep">
 								<Text class="sapUiSmallMarginBottom" text="Mit diesem Schritt werden die bereits verrechneten Daten in Backupdaten weggeschrieben"/>

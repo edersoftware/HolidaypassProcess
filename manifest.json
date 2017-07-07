@@ -18,6 +18,7 @@
                 "uri": "/sap/opu/odata/sap/ZFP_SRV/",
                 "type": "OData",
                 "settings": {
+
                     "odataVersion": "2.0",
                     "localUri": "localService/metadata.xml"
                 }
@@ -72,6 +73,7 @@
             "ZFP_SRV": {
                 "type": "sap.ui.model.odata.v2.ODataModel",
                 "settings": {
+                	"useBatch": false,
                     "defaultOperationMode": "Server",
                     "defaultBindingMode": "TwoWay",
                     "defaultCountMode": "Request"
@@ -80,6 +82,13 @@
                 "preload": true
             },
             "tarif_mismatch": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": false
+            },
+            "WebSocket_Updates": {
                 "type": "sap.ui.model.json.JSONModel",
                 "settings": {
                     "defaultBindingMode": "TwoWay"

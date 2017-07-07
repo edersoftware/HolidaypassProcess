@@ -29,7 +29,7 @@
 						</form:content>
 					</form:SimpleForm>
 					<Button text="Speichern und zurück" press="handleOnSaveAndReturn"></Button>
-					<Button text="Änderungen verwerfen und zurück" press="handleOnCancelAndReturn"></Button>
+					<Button text="Änderungen verwerfen und zurück" press="goBackToOverview"></Button>
 				</content>
 			</Page>
 		</pages>

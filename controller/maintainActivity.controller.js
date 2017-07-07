@@ -6,21 +6,12 @@ sap.ui.define([
 
 	return Controller.extend("ch.bielbienne.HolidayPassHolidayPassProcessing.controller.maintainActivity", {
 
-		/**
-		 * Called when a controller is instantiated and its View controls (if available) are already created.
-		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
-		 * @memberOf ch.bielbienne.HolidayPassHolidayPassProcessing.view.MaintainActivity
-		 */
 		onInit: function() {
 			var that = this;
-
 			this.getOwnerComponent().getModel("control").setProperty("/ActivityToUpdate", []);
-
 			this.getOwnerComponent().getModel("ZFP_SRV").read("/PartOfDaySet", {
-				success: function(oData, response) {
-
+				success: function(oData) {
 					var aAllPartOfDays = [];
-
 					for (var i = 0; i < oData.results.length; i++) {
 						var oPartOfDays = {
 							id: oData.results[i].Id,
@@ -30,9 +21,10 @@ sap.ui.define([
 					}
 					that.getOwnerComponent().getModel("settings").setProperty("/PartOfDays", aAllPartOfDays);
 				},
-				error: function(oError) {}
+				error: function() {
+					MessageBox.error("Technischer Fehler, bitte SAP CCC informieren");
+				}
 			});
-
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("MaintainActivity").attachMatched(this._onRouteMatched, this);
 
@@ -56,8 +48,7 @@ sap.ui.define([
 						text: {
 							path: 'ZFP_SRV>PartOfDay',
 							formatter: function(sPartOfDayKey) {
-								return that.PartOfDayFormatter(sPartOfDayKey);
-
+								return that._partOfDayFormatter(sPartOfDayKey);
 							}
 						}
 					})
@@ -106,7 +97,7 @@ sap.ui.define([
 						selectedKey: "{ZFP_SRV>PartOfDay}",
 						items: {
 							path: "settings>/PartOfDays",
-							templateShareable: false, //no curly brackets here!
+							templateShareable: false, 
 							template: new sap.ui.core.Item({
 								key: "{settings>id}",
 								text: "{settings>text}"
@@ -132,26 +123,28 @@ sap.ui.define([
 			this.getView().byId("cancelButtonActivity").setVisible(true);
 			this.rebindTable(this.oEditableTemplateTableTableActivities);
 		},
-
+		
+		_storeActivity: function(_sActivityToUpdateId,_oActivityToUpDate) {
+				this.getOwnerComponent().getModel("ZFP_SRV").update(_sActivityToUpdateId,
+					_oActivityToUpDate, {
+						success: function() {
+						},
+						error: function() {
+							MessageBox.error("Technischer Fehler, bitte SAP CCC informieren");
+							
+						},
+						async : true
+					});
+		},
 		onSaveActivity: function() {
 
 			var aActivitiesToUpdate = this.getOwnerComponent().getModel("control").getProperty("/ActivityToUpdate");
-			var oModel = this.getOwnerComponent().getModel("ZFP_SRV");
+			sap.ui.core.BusyIndicator.show(0);
 			for (var i = 0; aActivitiesToUpdate.length > i; i++) {
-
-				var oActivityToUpdate = oModel.getProperty(aActivitiesToUpdate[i]);
-				oModel.update(aActivitiesToUpdate[i],
-					oActivityToUpdate, {
-						success: function(oData, response) {
-							MessageBox.success("Erfolgreich gesichert");
-						},
-						error: function(oError) {
-							MessageBox.error("Technischer Fehler, bitte SAP CCC informieren");
-							
-						}
-					});
-
+				var oActivityToUpdate = this.getOwnerComponent().getModel("ZFP_SRV").getProperty(aActivitiesToUpdate[i]);
+                this._storeActivity(aActivitiesToUpdate[i],oActivityToUpdate);
 			}
+			sap.ui.core.BusyIndicator.hide();
 			this.getOwnerComponent().getModel("control").setProperty("/ActivityToUpdate", []);
 			this.getView().byId("oColumPartOfDay").setWidth("120px");
 			this.getView().byId("saveButtonActivity").setVisible(false);
@@ -169,7 +162,7 @@ sap.ui.define([
 			this.getOwnerComponent().getModel("control").setProperty("/ActivityToUpdate",[]);
 		},
 
-		PartOfDayFormatter: function(sPartOfDayKey) {
+		_partOfDayFormatter: function(sPartOfDayKey) {
 			var aAllPartOfDays = this.getOwnerComponent().getModel("settings").getProperty("/PartOfDays");
 			for (var i = 0; i < aAllPartOfDays.length; i++) {
 				if (aAllPartOfDays[i].id === sPartOfDayKey) {
@@ -192,7 +185,7 @@ sap.ui.define([
 			oRouter.navTo("Main");
 		},
 
-		_onRouteMatched: function(oEvent) {
+		_onRouteMatched: function() {
 			sap.ui.getCore().byId("oShellApp").setAppWidthLimited(false);
 		}
 

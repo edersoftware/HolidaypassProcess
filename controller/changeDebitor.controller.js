@@ -37,6 +37,7 @@ sap.ui.define([
 		handleOnSaveAndReturn: function() {
 			var oModel = this.getOwnerComponent().getModel("ZFP_SRV");
 			var sPath = this.getView().byId("oSimpleFormDebitorChange").getBindingContext().sPath;
+			var that = this;
 			var oDebitorToUpdate = {
 				Firstname: this.getView().byId("oInputFirstname").getValue(),
 				Lastname: this.getView().byId("oInputLastname").getValue(),
@@ -47,25 +48,22 @@ sap.ui.define([
 				Refound: this.getView().byId("oInputRefound").getValue(),
 				SapDebitorId: this.getView().byId("oInputSapDebitorId").getValue()
 			};
-
+			sap.ui.core.BusyIndicator.show(0);
 			oModel.update(sPath,
 				oDebitorToUpdate, {
-					success: function(oData, response) {
-						MessageBox.success("Debitor aktualisiert");
+					success: function() {
+						sap.ui.core.BusyIndicator.hide();
+						that.goBackToOverview();
 					},
 					error: function(oError) {
 						var sErrorMessage = JSON.parse(oError.responseText).error.message.value;
 						MessageBox.error(sErrorMessage);
+						sap.ui.core.BusyIndicator.hide();
 					},
-					asynch: false
+					asynch: true
 				});
-			this.goBackToOverview();
 		},
-
-		handleOnCancelAndReturn: function() {
-			this.goBackToOverview();
-		},
-		goBackToOverview : function() {
+		goBackToOverview: function() {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("ChangeDebitorOverview");
 		}

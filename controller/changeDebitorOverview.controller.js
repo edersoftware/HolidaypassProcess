@@ -36,29 +36,27 @@ sap.ui.define([
 		handleOnCorrectBielCityName: function() {
 			var that = this;
 			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
+			sap.ui.core.BusyIndicator.show(0);
 			oModel.callFunction("/correctBielCityName", {
 				method: "GET",
 				success: function(oData) {
 					if (oData.ok) {
-						MessageBox.success(oData.message);
 						var oTable = that.getView().byId("oTableDebitorToChange");
 						oTable.getModel("ZFP_SRV").refresh(true);
 						oTable.removeSelections(true);
 					} else {
 						MessageBox.error(oData.message);
 					}
+					sap.ui.core.BusyIndicator.hide();
 				},
 				error: function() {
 					MessageBox.error("Es ist ein technischer Fehler aufgetreten. Informieren Sie das SAP CCC");
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
 		},
-		/**
-		 * Called when a controller is instantiated and its View controls (if available) are already created.
-		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
-		 * @memberOf ch.bielbienne.HolidayPassHolidayPassProcessing.view.changeDebitorOverview
-		 */
+
 		onInit: function() {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("ChangeDebitorOverview").attachMatched(this._onRouteMatched, this);

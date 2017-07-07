@@ -16,7 +16,9 @@ sap.ui.define([
 		 */
 		onInit: function() {
 
-			var oModel = new sap.ui.model.json.JSONModel({
+			// Initialize the Models
+			
+			this.getOwnerComponent().getModel('WebSocket_Updates').setProperty("/", {
 				UploadState_sccessfull: 0,
 				UploadState_failed: 0,
 				UploadState_visible: false,
@@ -34,28 +36,28 @@ sap.ui.define([
 				MatchDeb_visible: false
 			});
 
-			this.getView().setModel(oModel, "WebSocket_Updates");
-
-			var oModelDebitorManagementTableData = {
+			this.getOwnerComponent().getModel('debitor_table').setProperty("/", {
 				unmatched_debitors: [],
 				matched_debitors: [],
 				forManuelMatch_debitors: []
-			};
-
-			this.getOwnerComponent().getModel('debitor_table').setProperty("/", oModelDebitorManagementTableData);
+			});
+			
+			// Set the SizeLimit of the ZFP_SRV Model to 2000 to avoid reloading. If more objects must loaded then we need to increase this value 
+			// or better implement the reload (loading more elements )
 			this.getOwnerComponent().getModel("ZFP_SRV").setSizeLimit(2000);
-
+            
+            
+            // Load and sort the period data
 			var that = this;
 			this.getOwnerComponent().getModel("ZFP_SRV").read("/HolidayPassPeriodSet", {
-				success: function(oData, response) {
+				success: function(oData) {
 					var oModel = that.getOwnerComponent().getModel("settings");
 					var aAllPeriods = oData.results;
-
 					var aPeriods = [];
 
-					function _checkPeriodExists(sId, aPeriods) {
-						for (var _i = 0; aPeriods.length > _i; _i++) {
-							if (aPeriods[_i].Id === sId) {
+					function _checkPeriodExists(sId, aPeriodsToCheck) {
+						for (var _i = 0; aPeriodsToCheck.length > _i; _i++) {
+							if (aPeriodsToCheck[_i].Id === sId) {
 								return _i;
 							}
 						}
@@ -87,48 +89,56 @@ sap.ui.define([
 					oModel.setProperty("/selected_period", aPeriods[0].Id);
 					oModel.setProperty("/periods", aPeriods);
 				},
-				error: function(oError) {}
+				error: function() {
+					MessageBox.error("Technisches Problem aufgetreten, bitte SAP CCC informieren.");
+				}
 			});
 		},
-		
-		handleStartManualDebitorSave : function(){
+
+		handleStartManualDebitorSave: function() {
+			sap.ui.core.BusyIndicator.show(0);
 			this.getOwnerComponent().getModel("ZFP_SRV").callFunction("/saveDebitorMapping", {
 				method: "GET",
-				success: function(oData, response) {
-				   MessageBox.success(oData.message);
+				success: function(oData) {
+					MessageBox.success(oData.message);
+					sap.ui.core.BusyIndicator.hide();
 				},
-				error: function(oError) {
+				error: function() {
 					MessageBox.error("Technisches Problem aufgetreten, bitte SAP CCC informieren.");
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
+
 		},
-		
-		handleStartManualDebitorRestore : function(){
-				this.getOwnerComponent().getModel("ZFP_SRV").callFunction("/restoreDebitorMapping", {
+
+		handleStartManualDebitorRestore: function() {
+			sap.ui.core.BusyIndicator.show(0);
+			this.getOwnerComponent().getModel("ZFP_SRV").callFunction("/restoreDebitorMapping", {
 				method: "GET",
-				success: function(oData, response) {
-				   MessageBox.success(oData.message);
+				success: function(oData) {
+					MessageBox.success(oData.message);
+					sap.ui.core.BusyIndicator.hide();
 				},
-				error: function(oError) {
+				error: function() {
 					MessageBox.error("Technisches Problem aufgetreten, bitte SAP CCC informieren.");
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
-			
-			
-			
+
 		},
-		
+
 		_updateProductiveCheck: function() {
 			var sPeriod = this.getView().byId("oSelectPeriod").getSelectedKey();
 			var that = this;
+			sap.ui.core.BusyIndicator.show(0);
 			this.getOwnerComponent().getModel("ZFP_SRV").callFunction("/checkProductionState", {
 				method: "GET",
 				urlParameters: {
 					periodId: sPeriod
 				},
-				success: function(oData, response) {
+				success: function(oData) {
 					var oMessageStrip = that.getView().byId("oMessageStripProductionCheck");
 					oMessageStrip.setVisible(true);
 					if (oData.ok) {
@@ -138,11 +148,13 @@ sap.ui.define([
 						oMessageStrip.setType("Warning");
 						oMessageStrip.setText(oData.message);
 					}
+					sap.ui.core.BusyIndicator.hide();
 				},
-				error: function(oError) {
+				error: function() {
 					MessageBox.error("Technisches Problem aufgetreten, bitte SAP CCC informieren.");
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
 		},
 
@@ -152,7 +164,7 @@ sap.ui.define([
 					this._updateProductiveCheck();
 					break;
 				case "ImportBookingStatementsStep":
-					var oModel = this.getView().getModel("WebSocket_Updates");
+					var oModel = this.getOwnerComponent().getModel('WebSocket_Updates');
 					oModel.setProperty("/UploadState_visible", false);
 					oModel.setProperty("/UploadStateAct_visible", false);
 					oModel.setProperty("/GroupBS_visible", false);
@@ -161,6 +173,7 @@ sap.ui.define([
 				default:
 			}
 		},
+		
 		/**
 		 * Löschen aller Daten
 		 */
@@ -172,23 +185,25 @@ sap.ui.define([
 				initialFocus: "Abbrechen",
 				actions: ["Ja, alle Daten löschen", "Abbrechen"],
 				onClose: function(sSelectedButton) {
+					sap.ui.core.BusyIndicator.show(0);
 					switch (sSelectedButton) {
 						case "Ja, alle Daten löschen":
 							var oModel = that.getOwnerComponent().getModel('ZFP_SRV');
-							that.getView().byId("oPageMain").setBusy(true);
 							oModel.callFunction("/deleteAllData", {
 								method: "GET",
-								success: function(oData, response) {
+								success: function(oData) {
 									if (!oData.ok) {
 										MessageBox.error(oData.message);
-									} 
+									}
+									sap.ui.core.BusyIndicator.hide();
 								},
-								error: function(oError) {
+								error: function() {
 									MessageBox.error("Technischer Fehler, bitte SAP CCC informieren");
+									sap.ui.core.BusyIndicator.hide();
 								},
-								async: false
+								async: true
 							});
-							that.getView().byId("oPageMain").setBusy(false);
+						
 							break;
 						case "Abbrechen":
 							// Nichts zu tun !						
@@ -251,17 +266,18 @@ sap.ui.define([
 			var that = this;
 			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			sap.ui.core.BusyIndicator.show(0);
 			oModel.callFunction("/checkTarif", {
 				method: "GET",
 				urlParameters: {
 					periodId: sPeriod
 				},
-				success: function(oData, response) {
+				success: function(oData) {
 					var aCheckResult = oData.results;
 					var aDisplayCheckResult = [];
-					var _findDebitorID = function(aDisplayCheckResult, sDebitorID) {
-						for (var i = 0; aDisplayCheckResult.length > i; i++) {
-							if (aDisplayCheckResult[i].DebitorId === sDebitorID) {
+					var _findDebitorID = function(_aDisplayCheckResult, _sDebitorID) {
+						for (var i = 0; _aDisplayCheckResult.length > i; i++) {
+							if (_aDisplayCheckResult[i].DebitorId === _sDebitorID) {
 								return i;
 							}
 						}
@@ -292,16 +308,19 @@ sap.ui.define([
 						var oModelTarifMisMatch = that.getOwnerComponent().getModel('tarif_mismatch');
 						oModelTarifMisMatch.setProperty("/period", sPeriod);
 						oModelTarifMisMatch.setProperty("/tarifmismatch", aDisplayCheckResult);
+						sap.ui.core.BusyIndicator.hide();
 						oRouter.navTo("ResolveTarifMismatch");
 					} else {
 						// All okay, close show "Okay" message
 						MessageBox.success("Pro Rechnung sind alle Tarife einheitlich.");
+						sap.ui.core.BusyIndicator.hide();
 					}
 				},
-				error: function(oError) {
+				error: function() {
 					MessageBox.error("Technisches Problem aufgetreten, bitte SAP CCC informieren.");
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
 		},
 
@@ -313,17 +332,18 @@ sap.ui.define([
 			var sPeriod = this.getView().byId("oSelectPeriod").getSelectedKey();
 			var that = this;
 			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
+			sap.ui.core.BusyIndicator.show(0);
 			oModel.callFunction("/createSAPDebitorExport", {
 				method: "GET",
 				urlParameters: {
 					Period: sPeriod
 				},
-				success: function(oData, response) {
+				success: function(oData) {
 					if (oData.Ok) {
 						if (oData.ShowAsWarning) {
-							 that.getOwnerComponent().getModel("settings").setProperty("/oDialogSDExportMessageType", "Warning");
+							that.getOwnerComponent().getModel("settings").setProperty("/oDialogSDExportMessageType", "Warning");
 						} else {
-							 that.getOwnerComponent().getModel("settings").setProperty("/oDialogSDExportMessageType", "Success");
+							that.getOwnerComponent().getModel("settings").setProperty("/oDialogSDExportMessageType", "Success");
 						}
 						that.getOwnerComponent().getModel("settings").setProperty("/oDialogSDExportMessage", oData.Message);
 						if (!that.oDialogSDExport) {
@@ -347,15 +367,18 @@ sap.ui.define([
 							});
 							that.getView().addDependent(that.oDialogSDExport);
 						}
+						sap.ui.core.BusyIndicator.hide();
 						that.oDialogSDExport.open();
 					} else {
 						MessageBox.error(oData.message);
+						sap.ui.core.BusyIndicator.hide();
 					}
 				},
-				error: function(oError) {
+				error: function() {
 					MessageBox.error("Technisches Problem aufgetreten, bitte SAP CCC informieren.");
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
 		},
 
@@ -368,17 +391,18 @@ sap.ui.define([
 			var sPeriod = this.getView().byId("oSelectPeriod").getSelectedKey();
 			var that = this;
 			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
+			sap.ui.core.BusyIndicator.show(0);
 			oModel.callFunction("/createInvoiceProtocoll", {
 				method: "GET",
 				urlParameters: {
 					Period: sPeriod
 				},
-				success: function(oData, response) {
+				success: function(oData) {
 					if (oData.Ok) {
-												if (oData.ShowAsWarning) {
-							 that.getOwnerComponent().getModel("settings").setProperty("/oDialogCreateInvoiceProtocolMessageType", "Warning");
+						if (oData.ShowAsWarning) {
+							that.getOwnerComponent().getModel("settings").setProperty("/oDialogCreateInvoiceProtocolMessageType", "Warning");
 						} else {
-							 that.getOwnerComponent().getModel("settings").setProperty("/oDialogCreateInvoiceProtocolMessageType", "Success");
+							that.getOwnerComponent().getModel("settings").setProperty("/oDialogCreateInvoiceProtocolMessageType", "Success");
 						}
 						that.getOwnerComponent().getModel("settings").setProperty("/oDialogCreateInvoiceProtocolMessage", oData.Message);
 						that.getOwnerComponent().getModel("settings").setProperty("/InvoiceProtocollURI", oData.WebURI);
@@ -413,12 +437,14 @@ sap.ui.define([
 							that.getView().addDependent(that.oDialogInvoiceProtocoll);
 						}
 						that.oDialogInvoiceProtocoll.open();
+						sap.ui.core.BusyIndicator.hide();
 					}
 				},
-				error: function(oError) {
+				error: function() {
 					MessageBox.error("Technisches Problem aufgetreten, bitte SAP CCC informieren.");
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
 		},
 
@@ -430,16 +456,18 @@ sap.ui.define([
 			this.initWebsocket("state_match_debi");
 			var that = this;
 			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
+			sap.ui.core.BusyIndicator.show(0);
 			oModel.callFunction("/mapDebitorsToSAPDebitors", {
 				method: "GET",
-				success: function(oData, response) {
-
+				success: function() {
+					sap.ui.core.BusyIndicator.hide();
 					that.socket.onclose();
 				},
-				error: function(oError) {
+				error: function() {
 					MessageBox.error("Technisches Problem aufgetreten, bitte SAP CCC informieren.");
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
 
 		},
@@ -460,27 +488,30 @@ sap.ui.define([
 		 * Anlegen der Rechungsnummern
 		 * @memberOf ch.bielbienne.HolidayPassHolidayPassProcessing.view.Main
 		 */
-		handleCreateInvoiceNumbers: function(oEvent) {
+		handleCreateInvoiceNumbers: function() {
 			var sPeriod = this.getView().byId("oSelectPeriod").getSelectedKey();
 			var that = this;
 			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
+			sap.ui.core.BusyIndicator.show(0);
 			oModel.callFunction("/createInvoiceNumbers", {
 				method: "GET",
 				urlParameters: {
 					Period: sPeriod
 				},
-				success: function(oData, response) {
+				success: function(oData) {
 					if (oData.ok) {
 						MessageBox.success(oData.message);
 					} else {
 						MessageBox.error(oData.message);
 					}
 					that._updateProductiveCheck();
+					sap.ui.core.BusyIndicator.hide();
 				},
-				error: function(oError) {
+				error: function() {
 					MessageBox.error("Es ist ein technischer Fehler aufgetreten, bitte SAP CCC informieren");
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
 
 		},
@@ -494,24 +525,27 @@ sap.ui.define([
 			this.initWebsocket("state_group_bs");
 			var sPeriod = this.getView().byId("oSelectPeriod").getSelectedKey();
 			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
+			sap.ui.core.BusyIndicator.show(0);
 			oModel.callFunction("/groupBillingStatements", {
 				method: "GET",
 				urlParameters: {
 					periodId: sPeriod
 				},
-				success: function(oData, response) {
+				success: function(oData) {
 					that.socket.onclose();
 					if (oData.ok) {
 						MessageBox.success(oData.message);
 					} else {
 						MessageBox.error(oData.message);
 					}
+					sap.ui.core.BusyIndicator.hide();
 				},
 				error: function(oError) {
 					MessageBox.error(oError);
 					that.socket.onclose();
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
 
 		},
@@ -538,7 +572,7 @@ sap.ui.define([
 				var socket = new WebSocket(webSocketURI);
 				socket.onopen = function() {};
 				//Create function for handling websocket messages
-				var oModel = this.getView().getModel("WebSocket_Updates");
+				var oModel = this.getOwnerComponent().getModel('WebSocket_Updates');
 
 				switch (sChannelId) {
 					case "state_match_debi":
@@ -559,7 +593,6 @@ sap.ui.define([
 									that.socket.close();
 									break;
 								case "endOfUploadBS":
-									MessageBox.success("Upload beendet");
 									that.socket.close();
 									break;
 								default:
@@ -617,20 +650,24 @@ sap.ui.define([
 		 */
 		handleCreateKN1SearchData: function() {
 			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
+			sap.ui.core.BusyIndicator.show(0);
 			oModel.callFunction("/updateKNA1SearchData", {
 				method: "GET",
-				success: function(oData, response) {
+				success: function(oData) {
 					if (oData.ok) {
 						MessageBox.success(oData.message);
 					} else {
 						MessageBox.error(oData.message);
 					}
+					sap.ui.core.BusyIndicator.hide();
 				},
 				error: function(oError) {
 					MessageBox.error(oError);
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
+
 		},
 
 		/**
@@ -639,23 +676,26 @@ sap.ui.define([
 		 * @memberOf ch.bielbienne.HolidayPassHolidayPassProcessing.view.Main
 		 */
 		handleStoreOldData: function() {
-			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
-			oModel.callFunction("/backupOldData", {
+			sap.ui.core.BusyIndicator.show(0);
+			this.getOwnerComponent().getModel('ZFP_SRV').callFunction("/backupOldData", {
 				method: "GET",
 				urlParameters: {
 					entity: 'period'
 				},
-				success: function(oData, response) {
+				success: function(oData) {
 					if (oData.ok) {
 						MessageBox.success(oData.message);
+						sap.ui.core.BusyIndicator.hide();
 					} else {
 						MessageBox.error(oData.message);
+						sap.ui.core.BusyIndicator.hide();
 					}
 				},
 				error: function(oError) {
 					MessageBox.error(oError);
+					sap.ui.core.BusyIndicator.hide();
 				},
-				async: false
+				async: true
 			});
 		},
 
@@ -664,7 +704,7 @@ sap.ui.define([
 		 * @memberOf ch.bielbienne.HolidayPassHolidayPassProcessing.view.Main
 		 */
 		handleUploadComplete: function() {
-			//	this.socket.close();
+			sap.ui.core.BusyIndicator.hide();
 		},
 
 		/**
@@ -718,6 +758,7 @@ sap.ui.define([
 
 			oFileUploader.addHeaderParameter(headerParma);
 			this.initWebsocket(sWebSocketChannel);
+			sap.ui.core.BusyIndicator.show(0);
 			oFileUploader.upload();
 		}
 	});
