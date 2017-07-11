@@ -121,6 +121,7 @@ sap.ui.define([
 			this.getView().byId("editButtonActivity").setVisible(false);
 			this.getView().byId("saveButtonActivity").setVisible(true);
 			this.getView().byId("cancelButtonActivity").setVisible(true);
+			this.getView().byId("oPageMaintainActivity").setShowNavButton(false);
 			this.rebindTable(this.oEditableTemplateTableTableActivities);
 		},
 		
@@ -150,6 +151,7 @@ sap.ui.define([
 			this.getView().byId("saveButtonActivity").setVisible(false);
 			this.getView().byId("cancelButtonActivity").setVisible(false);
 			this.getView().byId("editButtonActivity").setVisible(true);
+			this.getView().byId("oPageMaintainActivity").setShowNavButton(true);
 			this.rebindTable(this.oReadOnlyTemplateTableActivities);
 		},
 
@@ -158,6 +160,7 @@ sap.ui.define([
 			this.getView().byId("cancelButtonActivity").setVisible(false);
 			this.getView().byId("saveButtonActivity").setVisible(false);
 			this.getView().byId("editButtonActivity").setVisible(true);
+			this.getView().byId("oPageMaintainActivity").setShowNavButton(true);
 			this.rebindTable(this.oReadOnlyTemplateTableActivities);
 			this.getOwnerComponent().getModel("control").setProperty("/ActivityToUpdate",[]);
 		},

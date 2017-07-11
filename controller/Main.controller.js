@@ -164,6 +164,7 @@ sap.ui.define([
 					this._updateProductiveCheck();
 					break;
 				case "ImportBookingStatementsStep":
+					this.getOwnerComponent().getModel("ZFP_SRV").refresh(true);
 					var oModel = this.getOwnerComponent().getModel('WebSocket_Updates');
 					oModel.setProperty("/UploadState_visible", false);
 					oModel.setProperty("/UploadStateAct_visible", false);
@@ -533,11 +534,9 @@ sap.ui.define([
 				},
 				success: function(oData) {
 					that.socket.onclose();
-					if (oData.ok) {
-						MessageBox.success(oData.message);
-					} else {
-						MessageBox.error(oData.message);
-					}
+					if (!oData.ok) {
+					MessageBox.error(oData.message);
+					} 
 					sap.ui.core.BusyIndicator.hide();
 				},
 				error: function(oError) {
@@ -594,6 +593,7 @@ sap.ui.define([
 									break;
 								case "endOfUploadBS":
 									that.socket.close();
+									that.getOwnerComponent().getModel('ZFP_SRV').refresh(true);
 									break;
 								default:
 									var aState = oMessage.data.split(":");
@@ -611,7 +611,8 @@ sap.ui.define([
 									that.socket.close();
 									break;
 								case "endOfUploadACT":
-									MessageBox.success("Upload beendet");
+								//	MessageBox.success("Upload beendet");
+									that.getOwnerComponent().getModel('ZFP_SRV').refresh(true);
 									that.socket.close();
 									break;
 								default:
@@ -634,9 +635,10 @@ sap.ui.define([
 						break;
 				}
 				socket.onclose = function() {
-					socket.close();
+					if(socket != null) {
+					socket.close();	
 					socket = null;
-
+					}
 				};
 				this.socket = socket;
 			} catch (exception) {
@@ -729,6 +731,7 @@ sap.ui.define([
 			}
 
 			var oFileUploader = this.getView().byId(sFileUploaderId);
+			var sFileName = oFileUploader.getValue();
 			var Service1 = window.location.origin + "/sap/opu/odata/sap/ZFP_SRV/FileSet('onlyfor_x-csrf-token')";
 			var token = "";
 			jQuery.ajax({
@@ -754,12 +757,16 @@ sap.ui.define([
 
 			headerParma = new sap.ui.unified.FileUploaderParameter();
 			headerParma.setName('Slug');
-			headerParma.setValue(sFileType);
+			headerParma.setValue(sFileType + ';' + sFileName);
 
 			oFileUploader.addHeaderParameter(headerParma);
 			this.initWebsocket(sWebSocketChannel);
 			sap.ui.core.BusyIndicator.show(0);
 			oFileUploader.upload();
+		},
+		
+		getNumber : function(sNumber) {
+			return parseInt(sNumber);
 		}
 	});
 });

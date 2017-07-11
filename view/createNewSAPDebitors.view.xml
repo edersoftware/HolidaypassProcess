@@ -5,7 +5,7 @@
 			<Page title="Für folgende Debitoren wurden neue SAP Debitoren angelegt" showNavButton="true" navButtonPress= "handleBackButton">
 				<content>
 						<Table mode="None" id="oTableNewSAPDebitorCreated"
-											items="{ path: 'ZFP_SRV>/DebitorSet?$filter=NewSapDebitor eq true', 
+											items="{ path: 'ZFP_SRV>/DebitorSet', 
 											filters:[{path: 'NewSapDebitor', operator: 'EQ', value1: 'true'}] ,
 											sorter: { path: 'Lastname' } }">
 											<columns>

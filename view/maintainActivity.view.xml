@@ -2,7 +2,7 @@
 	controllerName="ch.bielbienne.HolidayPassHolidayPassProcessing.controller.maintainActivity" xmlns:html="http://www.w3.org/1999/xhtml">
 	<App id="app">
 		<pages>
-			<Page title="Aktivitäten anzeigen / bearbeiten" showNavButton="true" navButtonPress= "handleBackButton">
+			<Page id="oPageMaintainActivity" title="Aktivitäten anzeigen / bearbeiten" showNavButton="true" navButtonPress= "handleBackButton">
 				<content>
 						<Table mode="None" id="oTableTableActivities">
 									<headerToolbar>

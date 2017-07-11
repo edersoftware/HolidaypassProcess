@@ -3,7 +3,7 @@
 	displayBlock="true" xmlns="sap.m">
 	<App id="app">
 		<pages>
-			<Page title="Ferienpass" id = "oPageMain" busyIndicatorDelay = "1">
+			<Page title="Ferienpass" id="oPageMain" busyIndicatorDelay="1">
 				<content>
 					<IconTabBar id="oIconTabBarMainPage" class="sapUiResponsiveContentPadding" select="handleOnSelectTabBar">
 						<items>
@@ -32,8 +32,40 @@
 									</headerToolbar>
 									<content>
 										<layout:VerticalLayout>
-											<u:FileUploader buttonText = "Buchungsfile auswählen" id="fileUploaderBooking" uploadUrl="/sap/opu/odata/sap/ZFP_SRV/FileSet" width="400px" tooltip="Ferienpass Daten hochladen"
-												uploadComplete="handleUploadComplete" useMultipart="false"/>
+											<Table title="Upload-History" mode="None" id="oTableUploadHistoryBillingStatements"
+												items="{ path: 'ZFP_SRV>/UploadHistorySet', filters:[{path: 'Type', operator: 'EQ', value1: '1'}] , sorter: { path: 'UploadTimestamp' } }">
+												<headerToolbar>
+													<Toolbar>
+														<Title text="Upload-History" level="H3"/>
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column>
+														<Text text="Upload Zeitpunkt"/>
+													</Column>
+													<Column>
+														<Text text="Filename"/>
+													</Column>
+													<Column hAlign="Right">
+														<Text text="Benutzer"/>
+													</Column>
+													<Column hAlign="Right">
+														<Text text="Hochgeladene Items"/>
+													</Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<cells>
+															<Text text="{ path: 'ZFP_SRV>UploadTimestamp', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'medium', UTC: true } }"/>
+															<Text text="{ZFP_SRV>Filename}"/>
+															<Text text="{ZFP_SRV>Username}"/>
+															<Text text="{ path: 'ZFP_SRV>AmountOfItems' , formatter : '.getNumber' }"/>
+														</cells>
+													</ColumnListItem>
+												</items>
+											</Table>
+											<u:FileUploader buttonText="Buchungsfile auswählen" id="fileUploaderBooking" uploadUrl="/sap/opu/odata/sap/ZFP_SRV/FileSet" width="400px"
+												tooltip="Ferienpass Daten hochladen" uploadComplete="handleUploadComplete" useMultipart="false"/>
 											<Button id="oButtonUploadBooking" text="Ferienpass Buchungsdaten hochladen" press="handleUploadPress"/>
 											<Text text="Erfolgreich hochgeladene Items {WebSocket_Updates>/UploadState_successfull}" visible="{WebSocket_Updates>/UploadState_visible}"/>
 											<Text text="Fehlerhaft hochgeladene Items {WebSocket_Updates>/UploadState_failed}" visible="{WebSocket_Updates>/UploadState_visible}"/>
@@ -48,8 +80,40 @@
 									</headerToolbar>
 									<content>
 										<layout:VerticalLayout>
-											<u:FileUploader buttonText = "Aktivitätsfile auswählen" id="fileUploaderActivity" uploadUrl="/sap/opu/odata/sap/ZFP_SRV/FileSet" width="400px" tooltip="Ferienpass Daten hochladen"
-												uploadComplete="handleUploadComplete" useMultipart="false"></u:FileUploader>
+											<Table title="Upload-History" mode="None" id="oTableUploadHistoryActivity"
+												items="{ path: 'ZFP_SRV>/UploadHistorySet', filters:[{path: 'Type', operator: 'EQ', value1: '2'}] , sorter: { path: 'UploadTimestamp' } }">
+												<headerToolbar>
+													<Toolbar>
+														<Title text="Upload-History" level="H3"/>
+													</Toolbar>
+												</headerToolbar>
+												<columns>
+													<Column>
+														<Text text="Upload Zeitpunkt"/>
+													</Column>
+													<Column>
+														<Text text="Filename"/>
+													</Column>
+													<Column hAlign="Right">
+														<Text text="Benutzer"/>
+													</Column>
+													<Column hAlign="Right">
+														<Text text="Hochgeladene Items"/>
+													</Column>
+												</columns>
+												<items>
+													<ColumnListItem>
+														<cells>
+															<Text text="{ path: 'ZFP_SRV>UploadTimestamp', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'medium', UTC: true } }"/>
+															<Text text="{ZFP_SRV>Filename}"/>
+															<Text text="{ZFP_SRV>Username}"/>
+															<Text text="{ path: 'ZFP_SRV>AmountOfItems' , formatter : '.getNumber' }"/>
+														</cells>
+													</ColumnListItem>
+												</items>
+											</Table>
+											<u:FileUploader buttonText="Aktivitätsfile auswählen" id="fileUploaderActivity" uploadUrl="/sap/opu/odata/sap/ZFP_SRV/FileSet" width="400px"
+												tooltip="Ferienpass Daten hochladen" uploadComplete="handleUploadComplete" useMultipart="false"></u:FileUploader>
 											<Button id="oButtonUploadActivity" text="Ferienpass Aktivitätsdaten hochladen" press="handleUploadPress"/>
 											<Text text="Erfolgreich hochgeladene Items {WebSocket_Updates>/UploadStateAct_successfull}"
 												visible="{WebSocket_Updates>/UploadStateAct_visible}"/>
