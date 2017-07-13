@@ -6,7 +6,7 @@
 			<Page title="Ferienpassdebitoren für manuelle Zuweisung" showNavButton="true" navButtonPress="handleBackButton">
 				<content>
 					<Table mode="SingleSelect" selectionChange="handleSelectDebitorToMap" id="oTableDebitorManualMapping"
-						items="{ path: 'ZFP_SRV>/DebitorSet', sorter: { path: 'Lastname' }, filters: [{path: 'NotMatch', operator: 'EQ', value1: 'true'}] }">
+						items="{path: 'debitorsToMapManual>/'}">
 						<headerToolbar>
 							<Toolbar>
 								<Title text="Ferienpass-Debitoren zur MANUELLEN Zuweisung zu SAP Debitoren" level="H2"/>
@@ -38,13 +38,13 @@
 						<items>
 							<ColumnListItem>
 								<cells>
-									<Text text="{ZFP_SRV>DebitorId}"/>
-									<Text text="{ZFP_SRV>Firstname}"/>
-									<Text text="{ZFP_SRV>Lastname}"/>
-									<Text text="{ZFP_SRV>AdditionalName}"/>
-									<Text text="{ZFP_SRV>Street}"/>
-									<Text text="{ZFP_SRV>Zip}"/>
-									<Text text="{ZFP_SRV>City}"/>
+									<Text text="{debitorsToMapManual>DebitorId}"/>
+									<Text text="{debitorsToMapManual>Firstname}"/>
+									<Text text="{debitorsToMapManual>Lastname}"/>
+									<Text text="{debitorsToMapManual>AdditionalName}"/>
+									<Text text="{debitorsToMapManual>Street}"/>
+									<Text text="{debitorsToMapManual>Zip}"/>
+									<Text text="{debitorsToMapManual>City}"/>
 								</cells>
 							</ColumnListItem>
 						</items>

@@ -114,6 +114,13 @@
                     "defaultBindingMode": "TwoWay"
                 },
                 "preload": false
+            },
+            "debitorsToMapManual": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                },
+                "preload": false
             }
         },
         "resources": {
@@ -145,7 +152,7 @@
                 },
                 {
                     "name": "AssignDebitorManual",
-                    "pattern": "assignDebitorManual/{debitorId}",
+                    "pattern": "assignDebitorManual/{debitorId}/{index}",
                     "target": "AssignDebitorManual"
                 },
                 {

@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<TableSelectDialog contentWidth = "100%" noDataText="Kein Debitor gefunden" title= "Suche Debitor für Rechnungsdruck" search="handleSearchSingleInvoiceToPrint" confirm="handleCloseSingleInvoiceToPrint" cancel="handleCloseSingleInvoiceToPrint"
+	<TableSelectDialog contentWidth = "100%" noDataText="Kein Debitor gefunden" title= "Suche Debitor für Rechnungsdruck über SAP Debitorennummer" search="handleSearchSingleInvoiceToPrint" confirm="handleCloseSingleInvoiceToPrint" cancel="handleCloseSingleInvoiceToPrint"
 		items="{ path : 'ZFP_SRV>/DebitorSet', sorter : { path : 'Fullname', descending : false } }">
 		<ColumnListItem>
 			<cells>

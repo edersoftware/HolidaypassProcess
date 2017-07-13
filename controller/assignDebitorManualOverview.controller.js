@@ -11,11 +11,13 @@ sap.ui.define([
 		 * @param {sap.ui.base.Event} oEvent  Event Object, welches in diesem Fall die Selection enthält
 		 */
 		handleSelectDebitorToMap: function(oEvent) {
-			var oBindingContext = oEvent.getSource().getSelectedItem().getBindingContext("ZFP_SRV");
+		var oSelectedItem = oEvent.getSource().getSelectedItem();
+			var iIndex = oEvent.getSource().indexOfItem(oSelectedItem);
+			var sDebitorId = this.getOwnerComponent().getModel('debitorsToMapManual').getProperty("/" + iIndex + "/DebitorId");
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			var sDebitorId = oBindingContext.sPath.substring(17, oBindingContext.sPath.length - 2);
 			oRouter.navTo("AssignDebitorManual", {
-				debitorId: sDebitorId
+				debitorId: sDebitorId,
+				index : iIndex
 			});
 		},
 		
@@ -44,7 +46,6 @@ sap.ui.define([
 		 */
 		_onRouteMatched: function() {
 			var oTable = this.getView().byId("oTableDebitorManualMapping");
-			oTable.getModel("ZFP_SRV").refresh(true);
 			oTable.removeSelections(true);
 
 		}

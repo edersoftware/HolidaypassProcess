@@ -17,7 +17,7 @@ sap.ui.define([
 		onInit: function() {
 
 			// Initialize the Models
-			
+
 			this.getOwnerComponent().getModel('WebSocket_Updates').setProperty("/", {
 				UploadState_sccessfull: 0,
 				UploadState_failed: 0,
@@ -41,13 +41,12 @@ sap.ui.define([
 				matched_debitors: [],
 				forManuelMatch_debitors: []
 			});
-			
+
 			// Set the SizeLimit of the ZFP_SRV Model to 2000 to avoid reloading. If more objects must loaded then we need to increase this value 
 			// or better implement the reload (loading more elements )
 			this.getOwnerComponent().getModel("ZFP_SRV").setSizeLimit(2000);
-            
-            
-            // Load and sort the period data
+
+			// Load and sort the period data
 			var that = this;
 			this.getOwnerComponent().getModel("ZFP_SRV").read("/HolidayPassPeriodSet", {
 				success: function(oData) {
@@ -174,7 +173,7 @@ sap.ui.define([
 				default:
 			}
 		},
-		
+
 		/**
 		 * Löschen aller Daten
 		 */
@@ -204,7 +203,7 @@ sap.ui.define([
 								},
 								async: true
 							});
-						
+
 							break;
 						case "Abbrechen":
 							// Nichts zu tun !						
@@ -228,6 +227,36 @@ sap.ui.define([
 		 * @memberOf ch.bielbienne.HolidayPassHolidayPassProcessing.view.Main
 		 */
 		handleStartManualDebitorMatching: function() {
+			// Update JSON Model
+			// debitorsToMapManual
+
+			var that = this;
+			var Filter = new sap.ui.model.Filter('NotMatch', 'EQ', true);
+			this.getOwnerComponent().getModel("ZFP_SRV").read("/DebitorSet", {
+				filters: [Filter],
+				success: function(oData) {
+					var aResult = oData.results;
+					var aDataInModel = [];
+					for (var i = 0; i < aResult.length; i++) {
+						var oRow = {
+							AdditionalName: aResult[i].AdditionalName,
+							City: aResult[i].City,
+							DebitorId: aResult[i].DebitorId,
+							Firstname: aResult[i].Firstname,
+							Lastname: aResult[i].Lastname,
+							Street: aResult[i].Street,
+							Zip: aResult[i].Zip
+						};
+						aDataInModel.push(oRow);
+					}
+					that.getOwnerComponent().getModel("debitorsToMapManual").setProperty("/",aDataInModel);
+				},
+				error: function() {
+					MessageBox.error("Technisches Problem aufgetreten, bitte SAP CCC informieren.");
+				},
+				async : false
+			});
+
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("AssignDebitorManualOverview");
 		},
@@ -535,8 +564,8 @@ sap.ui.define([
 				success: function(oData) {
 					that.socket.onclose();
 					if (!oData.ok) {
-					MessageBox.error(oData.message);
-					} 
+						MessageBox.error(oData.message);
+					}
 					sap.ui.core.BusyIndicator.hide();
 				},
 				error: function(oError) {
@@ -611,7 +640,7 @@ sap.ui.define([
 									that.socket.close();
 									break;
 								case "endOfUploadACT":
-								//	MessageBox.success("Upload beendet");
+									//	MessageBox.success("Upload beendet");
 									that.getOwnerComponent().getModel('ZFP_SRV').refresh(true);
 									that.socket.close();
 									break;
@@ -635,9 +664,9 @@ sap.ui.define([
 						break;
 				}
 				socket.onclose = function() {
-					if(socket != null) {
-					socket.close();	
-					socket = null;
+					if (socket != null) {
+						socket.close();
+						socket = null;
 					}
 				};
 				this.socket = socket;
@@ -764,8 +793,8 @@ sap.ui.define([
 			sap.ui.core.BusyIndicator.show(0);
 			oFileUploader.upload();
 		},
-		
-		getNumber : function(sNumber) {
+
+		getNumber: function(sNumber) {
 			return parseInt(sNumber);
 		}
 	});

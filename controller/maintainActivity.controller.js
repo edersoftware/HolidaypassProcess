@@ -125,10 +125,13 @@ sap.ui.define([
 			this.rebindTable(this.oEditableTemplateTableTableActivities);
 		},
 		
-		_storeActivity: function(_sActivityToUpdateId,_oActivityToUpDate) {
+		_storeActivity: function(_sActivityToUpdateId,_oActivityToUpDate,_isLastActivity) {
 				this.getOwnerComponent().getModel("ZFP_SRV").update(_sActivityToUpdateId,
 					_oActivityToUpDate, {
 						success: function() {
+							if(_isLastActivity) {
+								sap.ui.core.BusyIndicator.hide();
+							}
 						},
 						error: function() {
 							MessageBox.error("Technischer Fehler, bitte SAP CCC informieren");
@@ -141,9 +144,13 @@ sap.ui.define([
 
 			var aActivitiesToUpdate = this.getOwnerComponent().getModel("control").getProperty("/ActivityToUpdate");
 			sap.ui.core.BusyIndicator.show(0);
+			var bIsLast = false;
 			for (var i = 0; aActivitiesToUpdate.length > i; i++) {
 				var oActivityToUpdate = this.getOwnerComponent().getModel("ZFP_SRV").getProperty(aActivitiesToUpdate[i]);
-                this._storeActivity(aActivitiesToUpdate[i],oActivityToUpdate);
+				if(aActivitiesToUpdate.length === ( i + 1 )){
+				   bIsLast = true;
+				}
+                this._storeActivity(aActivitiesToUpdate[i],oActivityToUpdate,bIsLast);
 			}
 			sap.ui.core.BusyIndicator.hide();
 			this.getOwnerComponent().getModel("control").setProperty("/ActivityToUpdate", []);

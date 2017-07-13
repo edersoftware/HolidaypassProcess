@@ -97,7 +97,7 @@ sap.ui.define([
 		},
 		handleSearchSingleInvoiceToPrint: function(oEvent) {
 			var sValue = oEvent.getParameter("value");
-			var oFilter = new Filter("Fullname", sap.ui.model.FilterOperator.Contains, sValue);
+			var oFilter = new Filter("SapDebitorId", sap.ui.model.FilterOperator.Contains, sValue);
 			var oBinding = oEvent.getSource().getBinding("items");
 			oBinding.filter([oFilter]);
 		},

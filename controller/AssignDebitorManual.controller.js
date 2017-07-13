@@ -8,6 +8,7 @@ sap.ui.define([
 ], function(Controller, Dialog, Button, Text, MessageToast, MessageBox) {
 	"use strict";
 	var sSearchField = "";
+	var iIndex = 0;
 	return Controller.extend("ch.bielbienne.HolidayPassHolidayPassProcessing.controller.AssignDebitorManual", {
 
 		handleBackButton: function() {
@@ -27,6 +28,7 @@ sap.ui.define([
 		},
 
 		_onRouteMatched: function(oEvent) {
+			iIndex = oEvent.getParameter("arguments").index;
 			var sDebitorId = oEvent.getParameter("arguments").debitorId;
 			var oModel = this.getOwnerComponent().getModel('ZFP_SRV');
 			var oSimpleFormDebitor = this.getView().byId("oSimpleFormDebitor");
@@ -83,6 +85,9 @@ sap.ui.define([
 								if (oData.ok) {
 									sap.ui.core.BusyIndicator.hide();
 									var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+									var aDebitorsToMatch = that.getOwnerComponent().getModel("debitorsToMapManual").getProperty("/");
+									aDebitorsToMatch.splice(iIndex,1);
+									that.getOwnerComponent().getModel("debitorsToMapManual").setProperty("/",aDebitorsToMatch);
 									oRouter.navTo("AssignDebitorManualOverview");
 
 								} else {
