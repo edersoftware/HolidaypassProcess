@@ -575,7 +575,6 @@ sap.ui.define([
 				},
 				async: true
 			});
-
 		},
 		/**
 		 * Initialisierung eines WebSockets zu einem definierten Kanals
@@ -664,10 +663,7 @@ sap.ui.define([
 						break;
 				}
 				socket.onclose = function() {
-					if (socket != null) {
-						socket.close();
-						socket = null;
-					}
+				this.close();
 				};
 				this.socket = socket;
 			} catch (exception) {
